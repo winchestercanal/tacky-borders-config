@@ -1,0 +1,245 @@
+# watch_config_changes: Recarrega as bordas automaticamente sempre que o arquivo de configuração for modificado.
+watch_config_changes: True # Opções: True (ativo) | False (desativado)
+
+# enable_logging: Registra mensagens (informações, avisos e erros) em um arquivo de log.
+# NOTA: Alterações nessa opção exigem reiniciar o aplicativo para ter efeito.
+enable_logging: True # Opções: True (ativo) | False (desativado)
+
+# rendering_backend: Tipo de renderizador utilizado. Valores suportados:
+#   - V2: Renderizador mais completo e com mais recursos. Disponível na v1.2.0 ou superior.
+#   - Legacy: Renderizador mais simples e com menos recursos. Disponível na v0.1.0 ou superior.
+#
+# NOTA: O desempenho entre os dois pode variar de sistema para sistema. Escolha o que funcionar melhor.
+rendering_backend: V2 # Opções: V2 (recomendado) | Legacy (mais simples)
+
+# Opções de configuração global
+global:
+  # border_width: Largura da borda (em pixels)
+  border_width: 5
+
+  # border_offset: Deslocamento da borda em relação às bordas da janela (em pixels)
+  #   - Valores negativos encolhem a borda para dentro
+  #   - Valores positivos expandem a borda para fora
+  border_offset: -2
+
+  # border_radius: Raio dos cantos da borda. Valores suportados:
+  #   - Auto: Determina o raio automaticamente
+  #   - Square: Cantos retos (raio = 0)
+  #   - Round: Cantos totalmente arredondados
+  #   - RoundSmall: Cantos levemente arredondados
+  #   - Ou informe qualquer valor numérico para um raio personalizado
+  border_radius: 30
+
+  # border_z_order: Ordem Z da borda em relação à sua janela. Valores suportados:
+  #   - AboveWindow: Posiciona a borda acima da janela
+  #   - BelowWindow: Posiciona a borda abaixo da janela
+  #
+  # NOTA: Usar 'AboveWindow' pode causar flickering (piscada) em alguns aplicativos
+  # que manipulam a camada das janelas, gerando conflitos de ordem Z.
+  border_z_order: BelowWindow # Opções: AboveWindow (acima) | BelowWindow (abaixo)
+
+  # follow_native_border: Segue o comportamento nativo do Windows para visibilidade de bordas.
+  #
+  # O Windows já exibe ou oculta bordas nativas dependendo do tipo ou estado da janela
+  # (ex.: bordas são ocultadas em janelas fullscreen sem borda). Quando ativado, faz o
+  # tacky-borders seguir esse mesmo comportamento de visibilidade.
+  #
+  # NOTA: Essa configuração afeta apenas a visibilidade de bordas que já foram inicializadas.
+  # Para garantir que uma borda seja inicializada, use window_rules.
+  follow_native_border: True # Opções: True (segue o Windows) | False (sempre exibe)
+
+  # initialize_delay: Tempo (em ms) antes da borda aparecer ao abrir uma nova janela
+  # unminimize_delay: Tempo (em ms) antes da borda aparecer ao restaurar uma janela minimizada
+  #
+  # Essas configurações ajudam a acomodar animações de janela (ex.: animações de abertura ou restauração).
+  # Defina como 0 se as animações de janela estiverem desativadas.
+  #
+  # Também podem ser usadas para acomodar animações da própria borda (ex.: animações de fade).
+  initialize_delay: 200
+  unminimize_delay: 150
+
+  # active_color: Cor da borda da janela ativa (em foco)
+  # inactive_color: Cor da borda da janela inativa (sem foco)
+  #
+  # Tipos de cor suportados:
+  #   - Sólida: Use um código hex ou "accent"
+  #       Exemplo:
+  #         active_color: "#ffffff"
+  #         OU
+  #         active_color: "accent"
+  #   - Gradiente: Defina as cores e a direção
+  #       Exemplo:
+  #         active_color:
+  #           colors: ["#000000", "#ffffff"]
+  #           direction: 45deg
+  #         OU
+  #         active_color:
+  #           colors: ["#000000", "#ffffff"]
+  #           direction:
+  #             start: [0.0, 1.0]
+  #             end: [1.0, 0.0]
+  #       NOTA: [0.0, 0.0] = canto superior esquerdo, [1.0, 1.0] = canto inferior direito
+  #   - Sensível ao tema: Defina cores separadas para os temas escuro/claro do Windows
+  #       Exemplo:
+  #         active_color:
+  #           dark: "#ffffff"
+  #           light: "#000000"
+  #       Cada valor (dark/light) pode ser um código hex, "accent" ou um gradiente.
+  #       As bordas são atualizadas automaticamente quando o tema do sistema muda.
+  active_color:
+    colors: ["#ff0000","#ff8000","#ffff00","#00ff00","#00ffff","#0000ff","#8000ff","#ff0000"]
+    direction: 45deg
+
+  inactive_color:
+    colors: ["#000000"]
+    direction:
+      start: [0.0, 1.0]
+      end: [1.0, 0.0]
+
+  # komorebi_colors: Integração adicional com os tipos especiais de janela do komorebi
+  #   - active_color é usado para o tipo "Single" do komorebi
+  #   - inactive_color é usado para o tipo "Unfocused" do komorebi
+  komorebi_colors:
+    stack_color: "#e762b7"
+    monocle_color: "#62e793"
+    floating_color: "#f5f5a5"
+    enabled: False # Opções: True (ativa integração komorebi) | False (desativado)
+
+  # animations: Configura o comportamento das animações das bordas
+  #   active: Animações para janelas ativas (em foco)
+  #   inactive: Animações para janelas inativas (sem foco)
+  #   fps: Taxa de quadros das animações
+  #
+  # Tipos de animação suportados:
+  #   - Spiral (gira p/ frente)
+  #   - ReverseSpiral (gira p/ trás)
+  #   - Fade (aparece/desaparece)
+  #
+  # Defina os tipos e parâmetros de animação assim:
+  #   active:
+  #     - type: ReverseSpiral
+  #       duration: 1800  # Duração da animação em milissegundos (ex: 1000 = 1 segundo)
+  #       easing: Linear # Opções: Linear | EaseIn | EaseOut | EaseInOut | EaseInOutQuad | EaseInQuad | EaseOutQuad
+  #
+  #     - type: Fade
+  #       duration: 200
+  #       easing: EaseInOutQuad
+  #
+  # NOTA: Animações do tipo Spiral podem ser pesadas em sistemas de baixo desempenho.
+  animations:
+    active:
+      - type: ReverseSpiral
+        duration: 20000
+        easing: Linear
+
+      - type: Fade
+        duration: 200
+        easing: EaseInOutQuad
+
+    inactive: [] # Sem animação para janelas inativas — adicione entradas como em "active" para ativar
+
+    fps: 60 # Taxa de quadros das animações (ex: 30 = mais leve | 60 = mais fluido | 144 = ultra fluido)
+    enabled: True # Opções: True (animações ativas) | False (desativado)
+
+  # effects: Configura os efeitos visuais das bordas
+  #   active: Efeitos para janelas ativas (em foco)
+  #   inactive: Efeitos para janelas inativas (sem foco)
+  #
+  # Tipos de efeito suportados:
+  #   - Shadow (Sombra)
+  #   - Glow (Brilho)
+  #
+  # Defina os tipos e parâmetros de efeito assim:
+  #   active:
+  #    - type: Shadow
+  #      blur: 2.0
+  #      spread: 0.0
+  #      opacity: 1.0
+  #      translation:
+  #        x: 0
+  #        y: 20
+  #
+  #    - type: Glow
+  #      blur: 8.0
+  #      spread: 0.0
+  #      opacity: 1.0
+  #
+  # NOTA: Esses efeitos podem aumentar significativamente o uso de CPU e GPU.
+  # Além disso, os efeitos requerem rendering_backend: V2 para funcionar.
+  effects:
+    active:
+      - type: Shadow
+        blur: 2.0
+        spread: 0.0
+        opacity: 1.0
+        translation:
+          x: 0
+          y: 0
+
+      - type: Glow
+        blur: 8.0
+        spread: 0.0
+        opacity: 1.0
+
+    inactive:
+      - type: Shadow
+        blur: 0.0
+        spread: 0.0
+        opacity: 0
+        translation:
+          x: 0
+          y: 0
+
+      - type: Glow
+        blur: 0.0
+        spread: 0.0
+        opacity: 0
+
+    enabled: True # Opções: True (efeitos ativos) | False (desativado)
+
+# Regras de configuração por aplicativo (substituem as configurações globais)
+window_rules:
+  - match: Class
+    name: "Windows.UI.Core.CoreWindow"
+    enabled: False # Opções: True | False | Auto — borda desativada para este processo
+
+  - match: Class
+    name: "XamlExplorerHostIslandWindow"
+    enabled: False # Opções: True | False | Auto — borda desativada para este processo
+
+  - match: Process
+    name: "tacky-borders"
+    enabled: False # Opções: True | False | Auto — borda desativada para este processo
+
+  - match: Process
+    name: "zebar"
+    enabled: False # Opções: True | False | Auto — borda desativada para este processo
+
+  - match: Title
+    name: "komorebi-bar"
+    enabled: False # Opções: True | False | Auto — borda desativada para este processo
+
+  - match: Title
+    name: "keyviz"
+    enabled: False # Opções: True | False | Auto — borda desativada para este processo
+
+  - match: Title
+    name: "Picture-in-Picture"
+    enabled: False # Opções: True | False | Auto — borda desativada para este processo
+
+  - match: Process
+    name: "seelen-ui"
+    enabled: False # Opções: True | False | Auto — borda desativada para este processo
+
+
+  # Exemplo de regra:
+  # - match: Class                   # Correspondência por Class, Title ou Process
+  #   name: "MozillaWindowClass"     # Nome da classe/título/processo a ser correspondido
+  #   strategy: Equals               # Estratégia de correspondência: Equals, Contains ou Regex (padrão: Equals)
+  #   enabled: True                  # Ativa a inicialização da borda: True, False ou Auto (padrão: Auto)
+  #
+  # NOTA:
+  #   - Qualquer opção da configuração global também pode ser definida em window_rules.
+  #   - Se não definida em uma regra, a configuração voltará aos valores globais.
+  #   - Definir 'border enabled' como True força a inicialização da borda, mas não garante sua visibilidade.
+  #     Se a borda ainda não aparecer, tente definir 'follow_native_border' como False.
